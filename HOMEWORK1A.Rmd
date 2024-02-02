@@ -1,0 +1,79 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+load("~/Documents/izzy work/BRFSS2022_rev.RData")
+```
+```{r}
+attach(brfss22)
+
+```
+```{r}
+hist(SLEPTIM1[(SLEPTIM1 >5) & (SLEPTIM1 < 9)])
+```
+```{r}
+summary(SEXVAR)
+summary(BIRTHSEX)
+```
+```{r}
+summary(GENHLTH)
+```
+```{r}
+summary(EDUCA)
+```
+```{r}
+install.packages("tidyverse")
+install.packages("plyr")
+```
+```{r}
+library(plyr)
+library(tidyverse)
+```
+```{r}
+summary(X_AGEG5YR)
+summary(INCOME3)
+```
+```{r}
+ddply(brfss22, .(INCOME3), summarize, mean = round(mean(SLEPTIM1, na.rm = TRUE), 2), sd = round(sd(SLEPTIM1, na.rm = TRUE), 2), n_obsv = length(is.na(SLEPTIM1) == FALSE) )
+```
+```{r}
+ddply(brfss22, .(INCOME3), summarize, sleep90th = quantile(SLEPTIM1,probs = 0.9, na.rm = TRUE), sleep10th = quantile(SLEPTIM1,probs = 0.1, na.rm = TRUE), n_obs = length(is.na(SLEPTIM1) == FALSE) )
+```
+```{r}
+table(GENHLTH,SEXVAR)
+xtabs(~GENHLTH + SEXVAR)
+```
+```{r}
+prop.table(table(GENHLTH,SEXVAR))
+```
+```{r}
+mean(SLEPTIM1[(EDUCA == "College 4 years or more (College graduate)")], na.rm = TRUE)
+
+# alternatively
+restrict1 <- as.logical(EDUCA == "College 4 years or more (College graduate)")
+dat_subset1 <- subset(brfss22, restrict1)
+
+detach()
+attach(dat_subset1)
+
+mean(SLEPTIM1, na.rm = TRUE)
+
+detach()
+
+```
+```{r}
+mean(brfss22$SLEPTIM1, na.rm = TRUE)
+mean(dat_subset1$SLEPTIM1, na.rm = TRUE)
+
+```
+```{r}
+detach()
+```
+
+
+
